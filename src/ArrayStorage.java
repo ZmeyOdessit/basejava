@@ -28,7 +28,7 @@ public class ArrayStorage {
 
     void delete(String uuid) {
         for (int i = 0; i < sizeStorage; i++) {
-            if (uuid.equals(storage[i].toString())) {
+            if (storage[i].uuid.equals(uuid)) {
                 System.arraycopy(storage, i + 1, storage, i, sizeStorage - i - 1);
                 sizeStorage--;
             }
@@ -39,7 +39,7 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        Resume[] all = new Resume[size()];
+        Resume[] all = new Resume[sizeStorage];
         System.arraycopy(storage, 0, all, 0, sizeStorage);
         return all;
     }
