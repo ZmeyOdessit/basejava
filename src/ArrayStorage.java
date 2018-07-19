@@ -29,7 +29,6 @@ public class ArrayStorage {
         int leng = sizeStorage;
         for (int i = 0; i < leng; i++) {
             if (uuid.equals(storage[i].toString())) {
-                storage[i] = null;
                 System.arraycopy(storage, i + 1, storage, i, sizeStorage - i - 1);
                 sizeStorage--;
 
