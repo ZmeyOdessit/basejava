@@ -3,49 +3,36 @@
  */
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
+    private int sizeStorage = 0;
 
     void clear() {
-        int i = 0;
-        while (storage[i] != null) {
+        for (int i = 0; i < sizeStorage; i++) {
             storage[i] = null;
-            i++;
         }
+        sizeStorage = 0;
     }
 
     void save(Resume r) {
-        int i = 0;
-        boolean flag = true;
-        while (flag) {
-            if (storage[i] == null) {
-                storage[i] = r;
-                flag = false;
-            }
-            i++;
-        }
+        storage[sizeStorage++] = r;
     }
 
     Resume get(String uuid) {
-        int i = 0;
-        while (storage[i] != null) {
+        for (int i = 0; i < sizeStorage; i++) {
             if (uuid.equals(storage[i].toString())) {
                 return storage[i];
             }
-            i++;
         }
         return null;
     }
 
     void delete(String uuid) {
-        int leng = size();
+        int leng = sizeStorage;
         for (int i = 0; i < leng; i++) {
             if (uuid.equals(storage[i].toString())) {
                 storage[i] = null;
-            }
-        }
-        for (int i = 0; i < leng; i++) {
-            if (storage[i] == null) {
-                storage[i] = storage[i + 1];
-                storage[i + 1] = null;
+                System.arraycopy(storage, i + 1, storage, i, sizeStorage - i - 1);
+                sizeStorage--;
+
             }
         }
     }
@@ -60,10 +47,6 @@ public class ArrayStorage {
     }
 
     int size() {
-        int leng = 0;
-        while (storage[leng] != null) {
-            leng++;
-        }
-        return leng;
+        return sizeStorage;
     }
 }
