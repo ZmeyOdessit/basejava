@@ -13,8 +13,20 @@ public class ArrayStorage {
         sizeStorage = 0;
     }
 
+    void update(Resume r) {
+        if (get(r.uuid) != null) {
+            System.out.println("OK.");
+        } else {
+            System.out.println("Resume " + r.uuid + "not exist.");
+        }
+    }
+
     void save(Resume r) {
-        storage[sizeStorage++] = r;
+        if (get(r.uuid) == null) {
+            storage[sizeStorage++] = r;
+        } else {
+            System.out.println("Resume is exist.");
+        }
     }
 
     Resume get(String uuid) {
@@ -27,11 +39,15 @@ public class ArrayStorage {
     }
 
     void delete(String uuid) {
-        for (int i = 0; i < sizeStorage; i++) {
-            if (storage[i].uuid.equals(uuid)) {
-                System.arraycopy(storage, i + 1, storage, i, sizeStorage - i - 1);
-                sizeStorage--;
+        if (get(uuid) != null) {
+            for (int i = 0; i < sizeStorage; i++) {
+                if (storage[i].uuid.equals(uuid)) {
+                    System.arraycopy(storage, i + 1, storage, i, sizeStorage - i - 1);
+                    sizeStorage--;
+                }
             }
+        } else {
+            System.out.println("Resume " + uuid + "not exist.");
         }
     }
 
@@ -39,9 +55,9 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        Resume[] all = new Resume[sizeStorage];
-        System.arraycopy(storage, 0, all, 0, sizeStorage);
-        return all;
+        Resume[] result = new Resume[sizeStorage];
+        System.arraycopy(storage, 0, result, 0, sizeStorage);
+        return result;
     }
 
     int size() {
