@@ -2,6 +2,8 @@ package com.basejava.webapp.storage;
 
 import com.basejava.webapp.model.Resume;
 
+import java.util.Arrays;
+
 /**
  * Array based storage for Resumes
  */
@@ -11,45 +13,46 @@ public class ArrayStorage {
     private int sizeStorage = 0;
 
     public void clear() {
-        for (int i = 0; i < sizeStorage; i++) {
-            storage[i] = null;
-        }
+        Arrays.fill(storage, null);
         sizeStorage = 0;
     }
 
     public void update(Resume r) {
-        if (get(r.getUuid()) != null) {
+        int index = getIndex(r.getUuid());
+        if (index >= 0) {
+            storage[index] = r;
             System.out.println("OK.");
         } else {
-            System.out.println("Resume " + r.getUuid() + "not exist.");
+            System.out.println("Resume " + r.toString() + " not exist.");
         }
     }
 
     public void save(Resume r) {
-        if (get(r.getUuid()) == null) {
-            storage[sizeStorage++] = r;
+        if (size() <= 10000) {
+            if (get(r.getUuid()) == null) {
+                storage[sizeStorage++] = r;
+            } else {
+                System.out.println("Resume is exist.");
+            }
         } else {
-            System.out.println("Resume is exist.");
+            System.out.println("Storage is full.");
         }
     }
 
     public Resume get(String uuid) {
-        for (int i = 0; i < sizeStorage; i++) {
-            if (storage[i].getUuid().equals(uuid)) {
-                return storage[i];
-            }
+        int index = getIndex(uuid);
+        if (index >= 0) {
+            return storage[index];
+        } else {
+            return null;
         }
-        return null;
     }
 
     public void delete(String uuid) {
-        if (get(uuid) != null) {
-            for (int i = 0; i < sizeStorage; i++) {
-                if (storage[i].getUuid().equals(uuid)) {
-                    System.arraycopy(storage, i + 1, storage, i, sizeStorage - i - 1);
-                    sizeStorage--;
-                }
-            }
+        int index = getIndex(uuid);
+        if (index >= 0) {
+            System.arraycopy(storage, index + 1, storage, index, sizeStorage - index - 1);
+            sizeStorage--;
         } else {
             System.out.println("Resume " + uuid + "not exist.");
         }
@@ -66,5 +69,14 @@ public class ArrayStorage {
 
     public int size() {
         return sizeStorage;
+    }
+
+    private int getIndex(String uuid) {
+        for (int i = 0; i < sizeStorage; i++) {
+            if (storage[i].getUuid().equals(uuid)) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
