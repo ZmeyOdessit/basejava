@@ -13,24 +13,24 @@ public class ArrayStorage {
     private int sizeStorage = 0;
 
     public void clear() {
-        Arrays.fill(storage, null);
+        Arrays.fill(storage,0, sizeStorage, null);
         sizeStorage = 0;
     }
 
-    public void update(Resume r) {
-        int index = getIndex(r.getUuid());
+    public void update(Resume resume) {
+        int index = getIndex(resume.getUuid());
         if (index >= 0) {
-            storage[index] = r;
+            storage[index] = resume;
             System.out.println("OK.");
         } else {
-            System.out.println("Resume " + r.toString() + " not exist.");
+            System.out.println("Resume " + resume.toString() + " not exist.");
         }
     }
 
-    public void save(Resume r) {
-        if (size() <= 10000) {
-            if (get(r.getUuid()) == null) {
-                storage[sizeStorage++] = r;
+    public void save(Resume resume) {
+        if (sizeStorage <= storage.length) {
+            if (getIndex(resume.getUuid()) < 0) {
+                storage[sizeStorage++] = resume;
             } else {
                 System.out.println("Resume is exist.");
             }
@@ -62,9 +62,7 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     public Resume[] getAll() {
-        Resume[] result = new Resume[sizeStorage];
-        System.arraycopy(storage, 0, result, 0, sizeStorage);
-        return result;
+        return Arrays.copyOf(storage, sizeStorage);
     }
 
     public int size() {
