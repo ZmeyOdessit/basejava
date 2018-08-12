@@ -14,16 +14,13 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void saveAdd(Resume r) {
-        int newIndex = -getIndex(r.getUuid()) - 1;
-
+    protected void saveAdd(Resume r, int index) {
+        int newIndex = -index - 1;
         if (newIndex < size) {
-            System.arraycopy(storage, newIndex, storage, newIndex + 1, size + 1);
+            System.arraycopy(storage, newIndex, storage, newIndex + 1, size - newIndex);
             storage[newIndex] = r;
-            size++;
         } else {
             storage[size] = r;
-            size++;
         }
 
     }
@@ -31,6 +28,5 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     @Override
     protected void deleteAdd(int index) {
         System.arraycopy(storage, index + 1, storage, index, size - index - 1);
-        size--;
     }
 }
