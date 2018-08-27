@@ -1,5 +1,6 @@
 package ru.javawebinar.basejava.storage;
 
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import ru.javawebinar.basejava.exception.ExistStorageException;
@@ -53,7 +54,6 @@ public abstract class AbstractArrayStorageTest {
     public void update() throws Exception {
         Resume firstResume = new Resume(UUID_1);
         storage.update(firstResume);
-        //assertFalse(firstResume != storage.get(UUID_1));
         assertTrue(firstResume == storage.get(UUID_1));
     }
 
@@ -83,9 +83,14 @@ public abstract class AbstractArrayStorageTest {
 
     @Test(expected = StorageException.class)
     public void saveOverFlow() throws Exception {
-        for (int i = storage.size(); i < STORAGE_LIMIT +1; i++) {
-            storage.save(new Resume());
+        try {
+            for (int i = storage.size(); i < STORAGE_LIMIT + 1; i++) {
+                storage.save(new Resume());
+            }
+        } catch (StorageException e) {
+            Assert.fail();
         }
+        storage.save(new Resume());
     }
 
     @Test(expected = NotExistStorageException.class)
