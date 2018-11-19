@@ -1,58 +1,73 @@
 package ru.javawebinar.basejava.storage;
 
+import com.sun.org.apache.regexp.internal.RE;
 import ru.javawebinar.basejava.exception.ExistStorageException;
 import ru.javawebinar.basejava.exception.NotExistStorageException;
 import ru.javawebinar.basejava.model.Resume;
 
+import java.util.Collections;
+import java.util.List;
+
 public abstract class AbstractStorage implements Storage {
 
-    protected abstract void makeUpdate(Resume r, Object pointer);
+    protected abstract Object getSearchKey(String uuid);
 
-    protected abstract void makeSave(Resume r, Object pointer);
+    protected abstract void doUpdate(Resume r, Object searchKey);
 
-    protected abstract void makeDelete(Object pointer);
+    protected abstract boolean isExist(Object searchKey);
 
-    protected abstract Resume makeGet(Object pointer);
+    protected abstract void doSave(Resume r, Object searchKey);
 
-    protected abstract boolean isExist(Object pointer);
+    protected abstract Resume doGet(Object searchKey);
 
-    protected abstract Object getPointer(String uuid);
+    protected abstract void doDelete(Object searchKey);
+
+    protected abstract List<Resume> makeGetAll();
 
     public void update(Resume r) {
-        Object pointer = getPointer(r.getUuid());
-        if (!isExist(pointer)) {
-            throw new NotExistStorageException(r.getUuid());
-        } else {
-            makeUpdate(r, pointer);
-        }
+        Object searchKey = getExistedSearchKey(r.getUuid());
+        doUpdate(r, searchKey);
     }
 
     public void save(Resume r) {
-        Object pointer = getPointer(r.getUuid());
-        if (isExist(pointer)) {
-            throw new ExistStorageException(r.getUuid());
-        } /*else if (size == STORAGE_LIMIT) {
-            throw new StorageException("Storage overflow", r.getUuid());
-        }*/ else {
-            makeSave(r, pointer);
-        }
+        Object searchKey = getNotExistedSearchKey(r.getUuid());
+        doSave(r, searchKey);
     }
 
     public void delete(String uuid) {
-        Object pointer = getPointer(uuid);
-        if (!isExist(pointer)) {
-            throw new NotExistStorageException(uuid);
-        } else {
-            makeDelete(pointer);
-        }
+        Object searchKey = getExistedSearchKey(uuid);
+        doDelete(searchKey);
     }
 
     public Resume get(String uuid) {
-        Object pointer = getPointer(uuid);
-        if (!isExist(pointer)) {
+        Object searchKey = getExistedSearchKey(uuid);
+        return doGet(searchKey);
+    }
+
+    private Object getExistedSearchKey(String uuid) {
+        Object searchKey = getSearchKey(uuid);
+        if (!isExist(searchKey)) {
             throw new NotExistStorageException(uuid);
         }
-
-        return makeGet(pointer);
+        return searchKey;
     }
+
+    private Object getNotExistedSearchKey(String uuid) {
+        Object searchKey = getSearchKey(uuid);
+        if (isExist(searchKey)) {
+            throw new ExistStorageException(uuid);
+        }
+        return searchKey;
+    }
+
+    @Override
+    public List<Resume> getAllSorted() {
+        List <Resume> listResume = makeGetAll();
+        Collections.sort(listResume);
+        return listResume;
+    }
+
+
+
+
 }

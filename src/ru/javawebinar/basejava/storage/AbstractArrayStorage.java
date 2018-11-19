@@ -4,6 +4,7 @@ import ru.javawebinar.basejava.exception.StorageException;
 import ru.javawebinar.basejava.model.Resume;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Array based storage for Resumes
@@ -24,47 +25,46 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected void makeUpdate(Resume r, Object pointer) {
-        storage[(Integer) pointer] = r;
+    protected void doUpdate(Resume r, Object index) {
+        storage[(Integer) index] = r;
     }
 
     /**
      * @return array, contains only Resumes in storage (without null)
      */
-    public Resume[] getAll() {
-        return Arrays.copyOfRange(storage, 0, size);
+    public List<Resume> makeGetAll() {
+        return Arrays.asList(Arrays.copyOfRange(storage, 0, size));
     }
 
     @Override
-    protected void makeSave(Resume r, Object pointer) {
+    protected void doSave(Resume r, Object index) {
         if (size == STORAGE_LIMIT) {
             throw new StorageException("Storage overflow", r.getUuid());
         } else {
-            insertElement(r, (Integer) pointer);
+            insertElement(r, (Integer) index);
             size++;
         }
     }
 
     @Override
-    protected void makeDelete(Object pointer) {
-        fillDeletedElement((Integer) pointer);
+    public void doDelete(Object index) {
+        fillDeletedElement((Integer) index);
         storage[size - 1] = null;
         size--;
     }
 
-    @Override
-    protected Resume makeGet(Object pointer) {
-        return storage[(Integer) pointer];
+    public Resume doGet(Object index) {
+        return storage[(Integer) index];
     }
 
     @Override
-    protected boolean isExist(Object pointer) {
-        return (Integer) pointer >= 0;
+    protected boolean isExist(Object index) {
+        return (Integer) index >= 0;
     }
 
     protected abstract void fillDeletedElement(int index);
 
     protected abstract void insertElement(Resume r, int index);
 
-    protected abstract Integer getPointer(String uuid);
+    protected abstract Integer getSearchKey(String uuid);
 }
