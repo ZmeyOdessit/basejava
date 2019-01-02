@@ -1,6 +1,6 @@
 package ru.javawebinar.basejava;
 
-import ru.javawebinar.basejava.model.SectionType;
+import ru.javawebinar.basejava.model.NameOfSections;
 
 public class TestSingleton {
     private static TestSingleton instance;
@@ -20,7 +20,7 @@ public class TestSingleton {
         Singleton instance = Singleton.valueOf("INSTANCE");
         System.out.println(instance.ordinal());
 
-        for (SectionType type : SectionType.values()) {
+        for (NameOfSections type : NameOfSections.values()) {
             System.out.println(type.getTitle());
         }
     }

@@ -7,13 +7,15 @@ public class Company {
     private final String url;
     private final LocalDate start;
     private final LocalDate end;
+    private final String title;
     private final String description;
 
-    public Company(String name, String url, LocalDate start, LocalDate end, String description) {
+    public Company(String name, String url, LocalDate start, LocalDate end, String title, String description) {
         this.name = name;
         this.url = url;
         this.start = start;
         this.end = end;
+        this.title = title;
         this.description = description;
     }
 
@@ -28,6 +30,7 @@ public class Company {
         if (url != null ? !url.equals(company.url) : company.url != null) return false;
         if (start != null ? !start.equals(company.start) : company.start != null) return false;
         if (end != null ? !end.equals(company.end) : company.end != null) return false;
+        if (title != null ? !title.equals(company.title) : company.title != null) return false;
         return description != null ? description.equals(company.description) : company.description == null;
     }
 
@@ -37,6 +40,7 @@ public class Company {
         result = 31 * result + (url != null ? url.hashCode() : 0);
         result = 31 * result + (start != null ? start.hashCode() : 0);
         result = 31 * result + (end != null ? end.hashCode() : 0);
+        result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (description != null ? description.hashCode() : 0);
         return result;
     }
@@ -48,6 +52,7 @@ public class Company {
                 ", url='" + url + '\'' +
                 ", start=" + start +
                 ", end=" + end +
+                ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 '}';
     }

@@ -1,9 +1,6 @@
 package ru.javawebinar.basejava.model;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * ru.javawebinar.basejava.model.Resume class
@@ -13,8 +10,8 @@ public class Resume implements Comparable<Resume> {
     // Unique identifier
     private final String uuid;
     private final String fullName;
-    private final Map<NameOfContacts, String> contacts = new HashMap<>();
-    private final Map<NameOfSection, Section> sections = new HashMap<>();
+    private final Map<NameOfContacts, String> contacts = new EnumMap<>(NameOfContacts.class);
+    private final Map<NameOfSections, Section> sections = new EnumMap<>(NameOfSections.class);
 
 
     public Resume(String fullName) {
@@ -44,11 +41,11 @@ public class Resume implements Comparable<Resume> {
         return contacts.get(type);
     }
 
-    public Section getSections(NameOfSection type) {
+    public Section getSections(NameOfSections type) {
         return sections.get(type);
     }
 
-    public void addSection(NameOfSection section, Section value) {
+    public void addSection(NameOfSections section, Section value) {
         sections.put(section, value);
     }
 
@@ -60,21 +57,29 @@ public class Resume implements Comparable<Resume> {
 
         Resume resume = (Resume) o;
 
-        if (!uuid.equals(resume.uuid)) return false;
-        return fullName.equals(resume.fullName);
-
+        if (uuid != null ? !uuid.equals(resume.uuid) : resume.uuid != null) return false;
+        if (fullName != null ? !fullName.equals(resume.fullName) : resume.fullName != null) return false;
+        if (contacts != null ? !contacts.equals(resume.contacts) : resume.contacts != null) return false;
+        return sections != null ? sections.equals(resume.sections) : resume.sections == null;
     }
 
     @Override
     public int hashCode() {
-        int result = uuid.hashCode();
-        result = 31 * result + fullName.hashCode();
+        int result = uuid != null ? uuid.hashCode() : 0;
+        result = 31 * result + (fullName != null ? fullName.hashCode() : 0);
+        result = 31 * result + (contacts != null ? contacts.hashCode() : 0);
+        result = 31 * result + (sections != null ? sections.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return uuid + '(' + fullName + ')';
+        return "Resume{" +
+                "uuid='" + uuid + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", contacts=" + contacts +
+                ", sections=" + sections +
+                '}';
     }
 
     @Override

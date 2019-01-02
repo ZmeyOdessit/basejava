@@ -3,15 +3,15 @@ package ru.javawebinar.basejava.model;
 import java.util.Arrays;
 import java.util.List;
 
-public class SectionWithList extends Section {
+public class SectionList extends Section {
 
     private final List<String> descrition;
 
-    public SectionWithList(String... descritions) {
+    public SectionList(String... descritions) {
         this(Arrays.asList(descritions));
     }
 
-    public SectionWithList(List<String> descrition) {
+    public SectionList(List<String> descrition) {
         this.descrition = descrition;
     }
 
@@ -24,7 +24,7 @@ public class SectionWithList extends Section {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        SectionWithList that = (SectionWithList) o;
+        SectionList that = (SectionList) o;
 
         return descrition != null ? descrition.equals(that.descrition) : that.descrition == null;
     }

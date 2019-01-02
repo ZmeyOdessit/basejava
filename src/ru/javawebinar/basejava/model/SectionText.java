@@ -1,9 +1,9 @@
 package ru.javawebinar.basejava.model;
 
-public class SectionWithText extends Section {
+public class SectionText extends Section {
     private final String description;
 
-    public SectionWithText(String description) {
+    public SectionText(String description) {
         this.description = description;
     }
 
@@ -16,7 +16,7 @@ public class SectionWithText extends Section {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        SectionWithText that = (SectionWithText) o;
+        SectionText that = (SectionText) o;
 
         return description != null ? description.equals(that.description) : that.description == null;
     }

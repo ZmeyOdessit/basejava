@@ -1,6 +1,6 @@
 package ru.javawebinar.basejava.model;
 
-public enum  NameOfSection {
+public enum NameOfSections {
     PERSONAL("Личные качества"),
     OBJECTIVE("Позиция"),
     ACHIEVEMENT("Достижения"),
@@ -10,7 +10,7 @@ public enum  NameOfSection {
 
     private String title;
 
-    NameOfSection(String title) {
+    NameOfSections(String title) {
         this.title = title;
     }
 
